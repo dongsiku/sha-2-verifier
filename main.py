@@ -20,7 +20,7 @@ def return_hash_from_iso(iso_filename):
 
 
 def check_hash_key(iso_filename):
-    sha256_filename = "{}.sha256".format(iso_filename.split(".")[0])
+    sha256_filename = "{}.sha256".format(iso_filename.rsplit(".", 1)[0])
 
     with open(sha256_filename, "r") as f:
         hash_value = return_hash_from_iso(iso_filename)
