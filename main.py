@@ -41,7 +41,7 @@ class VerifySHA:
 
         with open(sha_filename, "r") as f:
             hash_value = self.return_hash_from_mainfile(sha_num)
-            sha_file = f.readline().strip()
+            sha_file = f.readline().strip().split(" ", 1)[0]
             print(".sha{}: {}".format(sha_num, sha_file))
             if sha_file == hash_value:
                 print("OK")
