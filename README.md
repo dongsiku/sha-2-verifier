@@ -6,7 +6,7 @@ This script simplifies verifications of files using sha256sum or sha512sum.
 
 ### Create \*.sha256 file (or \*.sha512)
 
-Download the hash value of the file which you want to verify, and save text file as `***.sha256` (or `***.sha512` for sha512sum).
+Download the hash value of the file which you want to verify, and save it to text file as `***.sha256` (or `***.sha512` for sha512sum).
 
 ### Launch this application
 
