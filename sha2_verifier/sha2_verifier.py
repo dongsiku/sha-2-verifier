@@ -32,7 +32,11 @@ class VerifySHA:
                     SHA_BASENAME_LIST[sha_basename_key]).exists():
                 sha_num = sha_basename_key
         if sha_num is False:
-            raise FileNotFoundError("No file *.sha256 or *.sh512")
+            raise FileNotFoundError(
+                "Save hash value to text file as "
+                f"{self.TARGET_FILENAME.name}.sha256 for sha256 "
+                f"(or {self.TARGET_FILENAME.name}.sha512 for sha512)"
+            )
 
         SHA_FILENAME = self.TARGET_FILENAME.parent / SHA_BASENAME_LIST[sha_num]
         with SHA_FILENAME.open("r") as sha_f:
