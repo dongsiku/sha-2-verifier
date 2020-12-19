@@ -1,53 +1,63 @@
 import hashlib
 import sys
-from os import path
+from pathlib import Path
 
 
 class VerifySHA:
-    def __init__(self, target_filename):
-        self.target_filename = target_filename
+    def __init__(self) -> None:
+        if len(sys.argv) != 1:
+            target_basename = sys.argv[1]
+        else:
+            target_basename = sys.argv[0]
+        self.TARGET_FILENAME = Path(target_basename).resolve()
 
-    def return_hash_from_target_file(self, sha_num):
-        with open(self.target_filename, 'rb') as f:
-            if sha_num == 256:
+    def return_hash_from_target_file(self, sha_num: str) -> str:
+        checksum = ""
+        with open(self.TARGET_FILENAME, 'rb') as f:
+            if sha_num == "256":
                 checksum = hashlib.sha256(f.read()).hexdigest()
-            elif sha_num == 512:
+            elif sha_num == "512":
                 checksum = hashlib.sha512(f.read()).hexdigest()
-            print("Hash value: {}".format(checksum))
-
+            print(f"{self.TARGET_FILENAME.name}: {checksum}")
         return checksum
 
-    def check_hash_key(self):
-        sha256_filename = "{}.sha256".format(self.target_filename)
-        sha512_filename = "{}.sha512".format(self.target_filename)
-        if path.isfile(sha256_filename):
-            sha_filename = sha256_filename
-            sha_num = 256
-        elif path.isfile(sha512_filename):
-            sha_filename = sha512_filename
-            sha_num = 512
-        else:
+    def check_hash_key(self) -> None:
+        SHA_BASENAME_LIST = {
+            "256": f"{self.TARGET_FILENAME}.sha256",
+            "512": f"{self.TARGET_FILENAME}.sha512"
+        }
+        sha_num = False
+        for sha_basename_key in SHA_BASENAME_LIST.keys():
+            if (self.TARGET_FILENAME.parent /
+                    SHA_BASENAME_LIST[sha_basename_key]).exists():
+                sha_num = sha_basename_key
+        if sha_num is False:
             raise FileNotFoundError("No file *.sha256 or *.sh512")
 
-        with open(sha_filename, "r") as sha_f:
-            hash_value = self.return_hash_from_target_file(sha_num)
+        SHA_FILENAME = self.TARGET_FILENAME.parent / SHA_BASENAME_LIST[sha_num]
+        with SHA_FILENAME.open("r") as sha_f:
             sha_lines = sha_f.readlines()
+            saved_hase_value = ""
             for sha_line in sha_lines:
                 temp_sha_line = sha_line.strip().rsplit(" ", 1)
-                if len(temp_sha_line) > 1:
-                    if temp_sha_line[1] == self.target_filename:
-                        saved_hase_value = temp_sha_line[0]
-                        break
-                else:
+                saved_hase_value = temp_sha_line[0]
+                if len(temp_sha_line) > 1 and \
+                        temp_sha_line[1] == self.TARGET_FILENAME:
                     saved_hase_value = temp_sha_line[0]
+                    break
 
-            print(".sha{}: {}".format(sha_num, saved_hase_value))
-            if saved_hase_value == hash_value:
-                print("OK")
-            else:
-                print("Error")
+        hash_value = self.return_hash_from_target_file(sha_num)
+        print(f"{SHA_FILENAME.name}: {saved_hase_value}")
+        if saved_hase_value == hash_value:
+            print("OK")
+        else:
+            print("Error")
+
+
+def main():
+    vsha = VerifySHA()
+    vsha.check_hash_key()
 
 
 if __name__ == "__main__":
-    vsha = VerifySHA(sys.argv[1])
-    vsha.check_hash_key()
+    main()
