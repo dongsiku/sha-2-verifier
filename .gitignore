@@ -1,2 +1,10 @@
+# Virtual environment
 .env/
+
+# Temporary files
 *.sha256
+
+# setuptools
+*.egg-info/
+dist/
+build/
