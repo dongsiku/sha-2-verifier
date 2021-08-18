@@ -3,6 +3,7 @@
 
 # Temporary files
 *.sha256
+*.sha512
 
 # setuptools
 *.egg-info/
