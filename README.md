@@ -12,13 +12,13 @@ This script simplifies verifications of files using sha256sum or sha512sum.
 There two ways to install this application.
 
 1. Write alias to `.bash_aliases` or `.bashrc`
-   
+
    ```bash:alias
    alias sha2-verifier="/PATH_TO_APPLICATION/sha2-verifier/sha2_verifier/sha2_verifier.py"
    ```
 
 2. Use pip (It **cannot** work well)
-    
+
     ```bash:with_pip
     pip install -e "git+https://github.com/dongsiku/sha2-verifier#egg=sha2-verifier"
     ```
@@ -45,4 +45,13 @@ $ verify-sha2 arduino-1.8.9-linux64.tar.xz
 arduino-1.8.9-linux64.tar.xz: 1cea9714...
 arduino-1.8.9-linux64.tar.xz.sha512: 1cea9714...
 OK
+```
+
+## Preparation before Debugging
+
+Create sha256 file for debug
+
+```bash:example
+cd sha2-verifier
+sha256sum sha2_verifier/sha2_verifier.py > sha2_verifier/sha2_verifier.py.sha256
 ```
