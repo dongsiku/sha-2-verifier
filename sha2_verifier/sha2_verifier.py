@@ -58,6 +58,11 @@ class VerifySHA:
             print("Error")
 
 
-if __name__ == "__main__":
+def main() -> None:
+    # for setup.py
     vsha = VerifySHA()
     vsha.check_hash_key()
+
+
+if __name__ == "__main__":
+    main()

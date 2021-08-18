@@ -4,8 +4,8 @@ with open("README.md", "r", encoding="utf-8") as fh:
     long_description = fh.read()
 
 setuptools.setup(
-    name="sha2-verifier",  # Replace with your own username
-    version="2.0.1",
+    name="sha2-verifier",
+    version="2.0.2",
     author="Muneue SUWA",
     author_email="dongsiku@gmail.com",
     description="Verify downloaded files with SHA256 or SHA512",
