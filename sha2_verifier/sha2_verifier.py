@@ -1,6 +1,7 @@
 import hashlib
 import sys
 from pathlib import Path
+import re
 
 
 class VerifySHA:
@@ -34,8 +35,7 @@ class VerifySHA:
         if sha_num is False:
             raise FileNotFoundError(
                 "Save hash value to text file as "
-                f"{self.TARGET_FILENAME.name}.sha256 for sha256 "
-                f"(or {self.TARGET_FILENAME.name}.sha512 for sha512)"
+                f"{self.TARGET_FILENAME.name}.sha256 or .sha512"
             )
 
         SHA_FILENAME = self.TARGET_FILENAME.parent / SHA_BASENAME_LIST[sha_num]
@@ -43,7 +43,7 @@ class VerifySHA:
             sha_lines = sha_f.readlines()
             saved_hase_value = ""
             for sha_line in sha_lines:
-                temp_sha_line = sha_line.strip().rsplit(" ", 1)
+                temp_sha_line = re.split("\\s+", sha_line, 1)
                 saved_hase_value = temp_sha_line[0]
                 if len(temp_sha_line) > 1 and \
                         temp_sha_line[1] == self.TARGET_FILENAME:
@@ -58,10 +58,6 @@ class VerifySHA:
             print("Error")
 
 
-def main():
+if __name__ == "__main__":
     vsha = VerifySHA()
     vsha.check_hash_key()
-
-
-if __name__ == "__main__":
-    main()
