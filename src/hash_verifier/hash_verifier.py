@@ -4,7 +4,7 @@ from pathlib import Path
 import re
 
 
-class VerifySHA:
+class VerifyHash:
     def __init__(self) -> None:
         if len(sys.argv) != 1:
             target_basename = sys.argv[1]
@@ -60,7 +60,7 @@ class VerifySHA:
 
 def main() -> None:
     # for setup.py
-    vsha = VerifySHA()
+    vsha = VerifyHash()
     vsha.check_hash_key()
 
 
