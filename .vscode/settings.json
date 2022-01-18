@@ -20,4 +20,9 @@
         "--aggressive",
         "--aggressive",
     ],
+    "[python]": {
+        "editor.rulers": [
+            80
+        ]
+    }
 }

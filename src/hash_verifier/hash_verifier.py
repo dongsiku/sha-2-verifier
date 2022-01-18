@@ -1,67 +1,109 @@
 import hashlib
-import sys
+import argparse
 from pathlib import Path
 import re
 
 
-class VerifyHash:
-    def __init__(self) -> None:
-        if len(sys.argv) != 1:
-            target_basename = sys.argv[1]
-        else:
-            target_basename = sys.argv[0]
-        self.TARGET_FILENAME = Path(target_basename).resolve()
+class HashVerifier:
+    def __init__(self, target_filename: Path) -> None:
+        """Initialize HashVerifier
 
-    def return_hash_from_target_file(self, sha_num: str) -> str:
-        checksum = ""
-        with open(self.TARGET_FILENAME, 'rb') as f:
-            if sha_num == "256":
-                checksum = hashlib.sha256(f.read()).hexdigest()
-            elif sha_num == "512":
-                checksum = hashlib.sha512(f.read()).hexdigest()
-            print(f"{self.TARGET_FILENAME.name}: {checksum}")
-        return checksum
+        Args:
+            target_filename (Path): Absolute path of target binary file
+        """
+        self.TARGET_FILENAME = target_filename
 
-    def check_hash_key(self) -> None:
-        SHA_BASENAME_LIST = {
-            "256": f"{self.TARGET_FILENAME}.sha256",
-            "512": f"{self.TARGET_FILENAME}.sha512"
-        }
-        sha_num = False
-        for sha_basename_key in SHA_BASENAME_LIST.keys():
-            if (self.TARGET_FILENAME.parent /
-                    SHA_BASENAME_LIST[sha_basename_key]).exists():
-                sha_num = sha_basename_key
-        if sha_num is False:
+    def get_hash_from_target_file(self, hash_file_suffix: str) -> str:
+        """Get hash value from target binary file
+
+        Args:
+            hash_file_suffix (str): The suffix of hash file
+
+        Returns:
+            str: Hash value from target file
+        """
+        hash_value = ""
+        with open(self.TARGET_FILENAME, "rb") as f:
+            file_content = f.read()
+        if hash_file_suffix == ".sha256":
+            hash_value = hashlib.sha256(file_content).hexdigest()
+        elif hash_file_suffix == ".sha512":
+            hash_value = hashlib.sha512(file_content).hexdigest()
+        elif hash_file_suffix == ".md5":
+            hash_value = hashlib.md5(file_content).hexdigest()
+        print(
+            f"Target binary file: {self.TARGET_FILENAME.name} -> {hash_value}"
+        )
+        return hash_value
+
+    def main(self) -> None:
+        """Main script; verify binary file with hash value from hash file
+
+        Raises:
+            FileExistsError: Several hash file exist
+            FileNotFoundError: No hash file exists
+        """
+        HASH_FILE_SUFFIX_LIST = [".sha256", ".sha512", ".md5"]
+
+        hash_filename = None
+        hash_file_suffix = ""
+        for temp_hash_file_suffix in HASH_FILE_SUFFIX_LIST:
+            temp_hash_filename = self.TARGET_FILENAME.with_suffix(
+                self.TARGET_FILENAME.suffix + temp_hash_file_suffix
+            )
+            if temp_hash_filename.exists():
+                if hash_filename is None:
+                    hash_filename = temp_hash_filename
+                    hash_file_suffix = temp_hash_file_suffix
+                else:
+                    raise FileExistsError("There are several hash files.")
+        if hash_filename is None:
             raise FileNotFoundError(
                 "Save hash value to text file as "
-                f"{self.TARGET_FILENAME.name}.sha256 or .sha512"
+                f"{self.TARGET_FILENAME.name}{HASH_FILE_SUFFIX_LIST}"
             )
 
-        SHA_FILENAME = self.TARGET_FILENAME.parent / SHA_BASENAME_LIST[sha_num]
-        with SHA_FILENAME.open("r") as sha_f:
-            sha_lines = sha_f.readlines()
-            saved_hase_value = ""
-            for sha_line in sha_lines:
-                temp_sha_line = re.split("\\s+", sha_line, 1)
-                saved_hase_value = temp_sha_line[0]
-                if len(temp_sha_line) > 1 and \
-                        temp_sha_line[1] == self.TARGET_FILENAME:
-                    saved_hase_value = temp_sha_line[0]
+        with hash_filename.open("r") as hash_f:
+            hash_file_lines = hash_f.readlines()
+            hase_from_hash_file = ""
+            for hash_file_line in hash_file_lines:
+                temp_hash_file_line = re.split("\\s+", hash_file_line, 1)
+                # When only target hash value is written to hash file
+                hase_from_hash_file = temp_hash_file_line[0]
+
+                # When several hash value are written to hash file
+                if len(temp_hash_file_line) > 1 and \
+                        temp_hash_file_line[1] == self.TARGET_FILENAME.name:
+                    hase_from_hash_file = temp_hash_file_line[0]
                     break
 
-        hash_value = self.return_hash_from_target_file(sha_num)
-        print(f"{SHA_FILENAME.name}: {saved_hase_value}")
-        if saved_hase_value == hash_value:
-            print("OK")
+        hash_value = self.get_hash_from_target_file(hash_file_suffix)
+        print(f"Hash file: {hash_filename.name} -> {hase_from_hash_file}")
+        if hase_from_hash_file == hash_value:
+            print("\033[32mOK\033[0m")
         else:
-            print("Error")
+            print("\033[31mError\033[0m")
 
 
 def main() -> None:
-    # for setup.py
-    vsha = VerifyHash()
-    vsha.check_hash_key()
+    """Main script for setup.cfg"""
+
+    parser = argparse.ArgumentParser(
+        description="Verify hash value of file(s)"
+    )
+    parser.add_argument(
+        "target_filenames", type=Path, nargs="+",
+        help="Select the file(s) which you want to verify",
+    )
+    # parser.add_argument(
+    #     "--debug", help="Debug mode", action="store_true",
+    # )
+    args = parser.parse_args()
+
+    for basename in args.target_filenames:
+        filename = basename.resolve()
+        hash_verifier = HashVerifier(filename)
+        hash_verifier.main()
 
 
 if __name__ == "__main__":
