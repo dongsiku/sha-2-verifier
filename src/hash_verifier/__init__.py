@@ -1,1 +1,1 @@
-import hash_verifier.main
+from . import hash_verifier

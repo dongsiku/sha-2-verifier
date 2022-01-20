@@ -5,6 +5,9 @@
 *.sha256
 *.sha512
 
+# Cache files
+__pycache__/
+
 # setuptools
 *.egg-info/
 dist/
