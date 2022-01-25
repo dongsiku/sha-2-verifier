@@ -46,12 +46,3 @@ arduino-1.8.9-linux64.tar.xz: 1cea9714...
 arduino-1.8.9-linux64.tar.xz.sha512: 1cea9714...
 OK
 ```
-
-## Preparation before Debugging
-
-Create sha256 file for debug
-
-```bash:example
-cd sha2-verifier
-sha256sum sha2_verifier/sha2_verifier.py > sha2_verifier/sha2_verifier.py.sha256
-```
