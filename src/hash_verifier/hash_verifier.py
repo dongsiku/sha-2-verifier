@@ -37,16 +37,20 @@ class HashVerifier:
         return hash_value
 
     def main(self) -> None:
-        """Main script; verify binary file with hash value from hash file
+        """Main script;
+        Detect hash file and verify target file with the hash file
 
         Raises:
             FileExistsError: Several hash file exist
             FileNotFoundError: No hash file exists
+
+        Returns:
+            bool: Did verify the target file
         """
         HASH_FILE_SUFFIX_LIST = [".sha256", ".sha512", ".md5"]
 
         hash_filename = None
-        hash_file_suffix = ""
+        # hash_file_suffix = ""
         for temp_hash_file_suffix in HASH_FILE_SUFFIX_LIST:
             temp_hash_filename = self.TARGET_FILENAME.with_suffix(
                 self.TARGET_FILENAME.suffix + temp_hash_file_suffix
@@ -54,7 +58,7 @@ class HashVerifier:
             if temp_hash_filename.exists():
                 if hash_filename is None:
                     hash_filename = temp_hash_filename
-                    hash_file_suffix = temp_hash_file_suffix
+                    # hash_file_suffix = temp_hash_file_suffix
                 else:
                     raise FileExistsError("There are several hash files.")
         if hash_filename is None:
@@ -62,7 +66,23 @@ class HashVerifier:
                 "Save hash value to text file as "
                 f"{self.TARGET_FILENAME.name}{HASH_FILE_SUFFIX_LIST}"
             )
+        if self.verify_target_file_with_hash_file(hash_filename):
+            print("\033[32mOK\033[0m")
+            return True
+        else:
+            print("\033[31mError\033[0m")
 
+        return False
+
+    def verify_target_file_with_hash_file(self, hash_filename: Path):
+        """Verify binary file with hash file
+
+        Args:
+            hash_filename (Path): File name of hash file
+
+        Returns:
+            bool: Did verify the target file
+        """
         with hash_filename.open("r") as hash_f:
             hash_file_lines = hash_f.readlines()
             hase_from_hash_file = ""
@@ -77,12 +97,12 @@ class HashVerifier:
                     hase_from_hash_file = temp_hash_file_line[0]
                     break
 
-        hash_value = self.get_hash_from_target_file(hash_file_suffix)
+        hash_value = self.get_hash_from_target_file(hash_filename.suffix)
         print(f"Hash file: {hash_filename.name} -> {hase_from_hash_file}")
         if hase_from_hash_file == hash_value:
-            print("\033[32mOK\033[0m")
-        else:
-            print("\033[31mError\033[0m")
+            return True
+
+        return False
 
 
 def main() -> None:

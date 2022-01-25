@@ -4,7 +4,7 @@
 # Temporary files
 *.sha256
 *.sha512
-!tests/*.png.*
+!tests/**/*.png.*
 
 # Cache files
 __pycache__/

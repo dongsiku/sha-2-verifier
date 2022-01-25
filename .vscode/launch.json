@@ -10,7 +10,7 @@
             "request": "launch",
             "program": "src/hash_verifier/hash_verifier.py",
             "args": [
-                "test/sample_target_file.png"
+                "tests/sample_target_file.png"
             ],
             "console": "integratedTerminal"
         }
