@@ -6,14 +6,9 @@
         {
             "label": "build",
             "type": "shell",
-            "command": ".env/Scripts/python.exe",
+            "command": "poetry",
             "args": [
-                "-m",
-                "pip",
-                "install",
-                "-U",
-                "-e",
-                "."
+                "build"
             ],
             "problemMatcher": []
         }
