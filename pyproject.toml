@@ -1,6 +1,20 @@
+[tool.poetry]
+name = "hash-verifier"
+version = "3.1.0"
+description = "It simplifies the verification of downloaded files with sha256sum or sha512sum"
+authors = ["Muneue SUWA <m_suwa@s.okayama-u.ac.jp>"]
+
+[tool.poetry.dependencies]
+python = "^3.8"
+autopep8 = "^1.6.0"
+flake8 = "^4.0.1"
+pytest = "^7.1.1"
+
+[tool.poetry.dev-dependencies]
+
+[tool.poetry.scripts]
+vh = "hash_verifier:hash_verifier.main"
+
 [build-system]
-requires = [
-    "setuptools>=42",
-    "wheel"
-]
-build-backend = "setuptools.build_meta"
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
