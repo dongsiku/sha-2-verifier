@@ -4,7 +4,7 @@ This script simplifies verifications of files using sha256sum or sha512sum.
 
 ## Required
 
-- Python: `>=3.6`
+- Python: `>=3.8`
 - PyPI
 
 ## Installation
@@ -14,7 +14,7 @@ There two ways to install this application.
 1. Use pip (Recommended)
 
     ```bash:with_pip
-    pip install -e "git+https://github.com/muneue-suwa/hash-verifier@v3.0.1#egg=hash-verifier"
+    pip install -e "git+https://github.com/muneue-suwa/hash-verifier@v3.1.1#egg=hash-verifier"
     ```
 
 1. Write alias to `.bash_aliases` or `.bashrc` (Linux user)
