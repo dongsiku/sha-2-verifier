@@ -92,8 +92,9 @@ class HashVerifier:
                 hase_from_hash_file = temp_hash_file_line[0]
 
                 # When several hash value are written to hash file
-                if len(temp_hash_file_line) > 1 and \
-                        temp_hash_file_line[1] == self.TARGET_FILENAME.name:
+                if len(temp_hash_file_line) > 1 and re.search(
+                        self.TARGET_FILENAME.name, temp_hash_file_line[1]
+                ):
                     hase_from_hash_file = temp_hash_file_line[0]
                     break
 
