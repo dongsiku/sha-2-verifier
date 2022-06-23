@@ -100,7 +100,7 @@ class HashVerifier:
 
         hash_value = self.get_hash_from_target_file(hash_filename.suffix)
         print(f"Hash file: {hash_filename.name} -> {hash_from_hash_file}")
-        if hash_from_hash_file == hash_value:
+        if re.fullmatch(hash_from_hash_file, hash_value, re.IGNORECASE):
             return True
 
         return False
