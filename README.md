@@ -14,7 +14,7 @@ There two ways to install this application.
 1. Use pip (Recommended)
 
     ```bash:with_pip
-    pip install -e "git+https://github.com/muneue-suwa/hash-verifier@v3.1.1#egg=hash-verifier"
+    pip install -e "git+https://github.com/muneue-suwa/hash-verifier@v3.1.2#egg=hash-verifier"
     ```
 
 1. Write alias to `.bash_aliases` or `.bashrc` (Linux user)

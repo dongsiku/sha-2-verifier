@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "hash-verifier"
-version = "3.1.1"
+version = "3.1.2"
 description = "It simplifies the verification of downloaded files with sha256sum or sha512sum"
 authors = ["Muneue SUWA <m_suwa@s.okayama-u.ac.jp>"]
 
