@@ -85,22 +85,22 @@ class HashVerifier:
         """
         with hash_filename.open("r") as hash_f:
             hash_file_lines = hash_f.readlines()
-            hase_from_hash_file = ""
+            hash_from_hash_file = ""
             for hash_file_line in hash_file_lines:
                 temp_hash_file_line = re.split("\\s+", hash_file_line, 1)
                 # When only target hash value is written to hash file
-                hase_from_hash_file = temp_hash_file_line[0]
+                hash_from_hash_file = temp_hash_file_line[0]
 
                 # When several hash value are written to hash file
                 if len(temp_hash_file_line) > 1 and re.search(
                         self.TARGET_FILENAME.name, temp_hash_file_line[1]
                 ):
-                    hase_from_hash_file = temp_hash_file_line[0]
+                    hash_from_hash_file = temp_hash_file_line[0]
                     break
 
         hash_value = self.get_hash_from_target_file(hash_filename.suffix)
-        print(f"Hash file: {hash_filename.name} -> {hase_from_hash_file}")
-        if hase_from_hash_file == hash_value:
+        print(f"Hash file: {hash_filename.name} -> {hash_from_hash_file}")
+        if hash_from_hash_file == hash_value:
             return True
 
         return False
